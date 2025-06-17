@@ -8,11 +8,11 @@ print('Looading model, please wait')
 pipe = pipeline("text2text-generation", model="google/flan-t5-large")
 
 headers = {
-    "User-Agent": "wikiaisearch/0.1 (orange.bro119@gmail.com)"
+    "User-Agent": "wikiaisearch/0.1 (SpaceAbyss888@gmail.com)"
     # Headers for the requests library
 }
 
-user_agent = "wikiaisearch/0.1 (orange.bro119@gmail.com)"
+user_agent = "wikiaisearch/0.1 (SpaceAbyss888@gmail.com)"
 # User agent for wikipedia api
 
 wiki = wikipediaapi.Wikipedia(
