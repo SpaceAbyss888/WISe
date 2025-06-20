@@ -52,7 +52,8 @@ def get_text(name):
 
 def question_answering(question, context):
   return pipe(f"""
-  You need to answer my question using context. If you can't find answer in the context - don't answer the question and just say that you can't find answer
+  You need to answer my question using context. If you can't find answer in the context - don't answer the question and just say this: none
+  Never answer the question if you are not sure. Answer the question only if you are fully sure and know that this is the exact information user need.
 
   Example:
   Question: What is the capital of France?
@@ -66,15 +67,26 @@ def question_answering(question, context):
   """)[0]['generated_text'] # This function uses context from wiki article to answer the question.
                             # As you can see, it only uses first 512 symbols of article ( this is because of pipeline limitation, i will fix it later)
 
-# Infinite loop so theres no need to run all the previous code
-print('To exit infinite Q/A loop type "exit"')
-while True:
-  question = input("What\' your question?\n")
-  if question == 'exit':
-    break
-  else:
-    pot_an = get_potential_article_name(question)
-    article_name = get_correction_suggestion(pot_an)
-    context = get_text(article_name)
-    print(f'Script used this article: {article_name}')
-    print(question_answering(question, context))
+def main():
+  # Infinite loop so theres no need to run all the previous code
+  print('To exit infinite Q/A loop type "exit"')
+  while True:
+    question = input("What\' your question?\n")
+    if question == 'exit':
+      break
+    else:
+      pot_an = get_potential_article_name(question)
+      article_name = get_correction_suggestion(pot_an)
+      if article_name == None:
+        print('Cannot find article')
+      else:
+        context = get_text(article_name)
+        print(f'Script used this article: {article_name}')
+        answer = question_answering(question, context)
+        if (answer == 'none') or (answer == 'None'):
+          print('Cannot find answer')
+        else:
+          print(answer)
+
+if __name__ == '__main__':
+  main()
